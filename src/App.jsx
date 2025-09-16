@@ -5,6 +5,7 @@ import TaskEditor from './components/TaskEditor';
 import PeopleManager from './components/PeopleManager';
 import { initialData } from './data/initial-data';
 import Papa from 'papaparse';
+import { generateVisualCsv } from './services/export';
 import './App.css';
 
 const App = () => {
@@ -240,49 +241,11 @@ const App = () => {
   };
 
   const handleVisualCsvExport = () => {
-    if (tasks.data.length === 0) {
+    const csvString = generateVisualCsv(projectName, people, tasks);
+    if (!csvString) {
       alert("No tasks to export.");
       return;
     }
-
-    const dates = tasks.data.flatMap(t => [new Date(t.start_date), new Date(t.end_date)]);
-    const minDate = new Date(Math.min.apply(null, dates));
-    const maxDate = new Date(Math.max.apply(null, dates));
-
-    const headers = ["Task Name", "Assignees"];
-    let currentWeek = new Date(minDate);
-    while (currentWeek <= maxDate) {
-      headers.push(`Wk of ${currentWeek.toISOString().slice(0, 10)}`);
-      currentWeek.setDate(currentWeek.getDate() + 7);
-    }
-
-    const peopleMap = new Map(people.map(p => [p.id, p.name]));
-    const rows = tasks.data.map(task => {
-      const row = { "Task Name": task.text, "Assignees": "" };
-
-      const assignees = (task.assignments || []).map(a => peopleMap.get(a.personId) || a.personId).join(', ');
-      row["Assignees"] = assignees;
-
-      const taskStart = new Date(task.start_date);
-      const taskEnd = new Date(task.end_date);
-
-      let weekStart = new Date(minDate);
-      while (weekStart <= maxDate) {
-        const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekEnd.getDate() + 7);
-        const colName = `Wk of ${weekStart.toISOString().slice(0, 10)}`;
-
-        if (taskStart < weekEnd && taskEnd > weekStart) {
-          row[colName] = assignees;
-        } else {
-          row[colName] = "";
-        }
-        weekStart.setDate(weekStart.getDate() + 7);
-      }
-      return row;
-    });
-
-    const csvString = Papa.unparse(rows, { header: true });
     const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
