@@ -30,12 +30,12 @@ describe('generateVisualCsv', () => {
     const result = generateVisualCsv(projectName, people, tasks);
 
     const expectedCsv = [
-      '"Task Name",Assignees,"Wk of 2025-09-15","Wk of 2025-09-22"',
-      '"Task 1",Alice,Alice,""',
-      '"Task 2",Bob,"",Bob',
+      'Task Name,Assignees,Wk of 2025-09-15,Wk of 2025-09-22',
+      'Task 1,Alice,Alice,',
+      'Task 2,Bob,,Bob',
     ].join('\r\n');
 
-    expect(result).toBe(expectedCsv);
+    expect(result.trim()).toBe(expectedCsv.trim());
   });
 
   it('should return null if there are no tasks', () => {

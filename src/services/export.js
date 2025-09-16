@@ -13,7 +13,7 @@ export const generateVisualCsv = (projectName, people, tasks) => {
   // 2. Generate weekly headers
   const headers = ["Task Name", "Assignees"];
   let currentWeek = new Date(minDate);
-  while (currentWeek <= maxDate) {
+  while (currentWeek < maxDate) {
     headers.push(`Wk of ${currentWeek.toISOString().slice(0, 10)}`);
     currentWeek.setDate(currentWeek.getDate() + 7);
   }
@@ -30,7 +30,7 @@ export const generateVisualCsv = (projectName, people, tasks) => {
     const taskEnd = new Date(task.end_date);
 
     let weekStart = new Date(minDate);
-    while (weekStart <= maxDate) {
+    while (weekStart < maxDate) {
       const weekEnd = new Date(weekStart);
       weekEnd.setDate(weekEnd.getDate() + 7);
       const colName = `Wk of ${weekStart.toISOString().slice(0, 10)}`;
