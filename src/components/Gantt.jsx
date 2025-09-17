@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { gantt } from 'dhtmlx-gantt';
-import 'dhtmlx-gantt/dhtmlx-gantt.css';
+import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
 
 const Gantt = ({
   tasks,
