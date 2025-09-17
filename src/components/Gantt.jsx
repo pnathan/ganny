@@ -48,6 +48,8 @@ const Gantt = ({
         focus: function (id) {}
       };
 
+      gantt.config.date_format = "%Y-%m-%d";
+
       gantt.config.lightbox.sections = [
         { name: "description", height: 70, type: "textarea", map_to: "text", focus: true },
         { name: "assignments", height: 200, type: "assignments_editor", map_to: "assignments" },
@@ -79,6 +81,7 @@ const Gantt = ({
         gantt.attachEvent('onAfterTaskAdd', (id, task) => onTaskAdd(id, task)),
         gantt.attachEvent('onAfterTaskDelete', (id) => onTaskDelete(id)),
         gantt.attachEvent('onBeforeTaskChanged', (id, mode, task) => {
+          console.log('Understanding the error as in the console.log: start_date type is', typeof task.start_date, 'value is', task.start_date);
           const duration = gantt.calculateDuration(task.start_date, task.end_date);
           if (duration < 0.1) {
             task.end_date = gantt.calculateEndDate(task.start_date, 0.1);
