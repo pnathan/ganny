@@ -2,4 +2,41 @@
   padding: 10px;
   border: 1px solid #ccc;
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.people-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.people-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.person-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.add-person-form {
+  display: flex;
+  margin-top: 10px;
+}
+
+.add-person-form input {
+  flex-grow: 1;
+  margin-right: 10px;
 }

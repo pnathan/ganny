@@ -133,6 +133,24 @@ const App = () => {
     setTasks({ data: newTasks, links: newLinks });
   };
 
+  const handlePersonAdd = (person) => {
+    setPeople([...people, person]);
+  };
+
+  const handlePersonUpdate = (id, updatedPerson) => {
+    setPeople(people.map(p => (p.id === id ? updatedPerson : p)));
+  };
+
+  const handlePersonDelete = (id) => {
+    setPeople(people.filter(p => p.id !== id));
+    // Also remove assignments from tasks
+    const newTasksData = tasks.data.map(task => ({
+      ...task,
+      assignments: (task.assignments || []).filter(a => a.personId !== id),
+    }));
+    setTasks(prevTasks => ({...prevTasks, data: newTasksData}));
+  };
+
   const handleJsonExport = () => {
     const data = {
       projectName,
@@ -265,6 +283,7 @@ const App = () => {
       <div className="gantt-container">
         <Gantt
           tasks={tasks}
+          people={people}
           onTaskUpdate={handleTaskUpdate}
           onLinkAdd={handleLinkAdd}
           onLinkDelete={handleLinkDelete}
@@ -273,7 +292,12 @@ const App = () => {
         />
       </div>
       <div className="bottom-container">
-        <PeopleManager />
+        <PeopleManager
+          people={people}
+          onPersonAdd={handlePersonAdd}
+          onPersonUpdate={handlePersonUpdate}
+          onPersonDelete={handlePersonDelete}
+        />
         <TaskEditor />
       </div>
     </div>
