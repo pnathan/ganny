@@ -59,6 +59,7 @@ const App = () => {
       const newTasksData = JSON.parse(JSON.stringify(tasks.data));
       newTasksData.forEach(t => t.isOverAllocated = false);
       const overAllocatedTaskIds = new Set();
+      const toDate = (date) => (date instanceof Date ? date : new Date(date));
 
       people.forEach(person => {
         const personTasks = newTasksData.filter(task =>
@@ -67,7 +68,7 @@ const App = () => {
 
         if (personTasks.length < 2) return;
 
-        const dates = personTasks.flatMap(t => [new Date(t.start_date), new Date(t.end_date)]);
+        const dates = personTasks.flatMap(t => [toDate(t.start_date), toDate(t.end_date)]);
         const minDate = new Date(Math.min.apply(null, dates));
         const maxDate = new Date(Math.max.apply(null, dates));
 
@@ -76,8 +77,8 @@ const App = () => {
           const contributingTasks = [];
 
           personTasks.forEach(task => {
-            const taskStart = new Date(task.start_date);
-            const taskEnd = new Date(task.end_date);
+            const taskStart = toDate(task.start_date);
+            const taskEnd = toDate(task.end_date);
             if (d >= taskStart && d < taskEnd) {
               const assignment = (task.assignments || []).find(a => a.personId === person.id);
               if (assignment) {
